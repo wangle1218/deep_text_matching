@@ -57,7 +57,7 @@ python bert_similarly.py
 
 - 将自己的数据集处理成 header 为 sentence1，sentence2，label 三个字段的csv文件,如下图所示：
 
-![avatar](./pic/捕获6.png)
+![avatar](./pic/捕获6.PNG)
 
 将数据分为 train.cav，dev.csv ，test.csv 放入 `./input` 文件夹中。
 
