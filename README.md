@@ -57,7 +57,7 @@ python bert_similarly.py
 
 - 将自己的数据集处理成 header 为 sentence1，sentence2，label 三个字段的csv文件,如下图所示：
 
-![avatar](./pic/捕获6.PNG)
+![avatar](./pic/捕获6.png)
 
 将数据分为 train.cav，dev.csv ，test.csv 放入 `./input` 文件夹中。
 
@@ -73,7 +73,7 @@ python bert_similarly.py
 
 文本匹配模型一般分为表示型和交互型模型，为了下文方便描述，我将文本匹配模型的框架分为三个层，分别是 Embedding 层，Encoding 层（在交互型模型里，该层还包含匹配层）, Prediction 层如下所示：
 
-![avatar](./pic/7.PNG)
+![avatar](./pic/7.png)
 
 ### Encoding 层参数共享与不共享
 
@@ -108,13 +108,13 @@ rep_right = bilstm(embed_right)
 
 在深度学习领域其实有个经验，就是只要把网络做深效果就会更好，这也许有一定道理，但是面对不同数据，我们应该多尝试。在 arcii 模型中 3 个 cnn block（如下图的 more 2D convolution & pooling 结构）比 2 个 cnn block的模型效果要差一些（0.7734 -> 0.7684）。
 
-![avatar](./pic/arcii.PNG)
+![avatar](./pic/arcii.png)
 
 产生这个结果的原因可能是所用数据集的句子基本是短句子，语句结构也不复杂的缘故。其实可以看到准确率差的也不多，但是使用 rnn 做 encode的模型在增加深度后效果将会差的更多。
 
 如下图所示的 drcn 模型，原文中使用 4 个 Nx 模块，每个Nx 包含 5 层 LSTM，总共20 层 LSTM的网络，但是在我的实验中我发现在每个 Nx 里面只能用两层LSTM，且只能用 1个 Nx，如果再多效果反而会不好。
 
-![avatar](./pic/drcn.PNG)
+![avatar](./pic/drcn.png)
 
 另外该模型虽然花里花俏的，但是效果并没有更朴素 bimpm 和 mvlstm 模型要好。也许是我用了 BatchNormalization 做层归一化的缘故（MatchZoo 中使用的 Dropout），但是不用 BN 的话训练时将会造成梯度爆炸。
 
@@ -122,7 +122,7 @@ rep_right = bilstm(embed_right)
 
 这两个模型都是使用2D convolution 做编码器提取特征的，但是为什么match_pyramid 效果这么差呢？将match_pyramid模型的结构和arcii对比一下：
 
-![avatar](./pic/match_pyramid.PNG)
+![avatar](./pic/match_pyramid.png)
 
 可以看到，match_pyramid直接用左右两个句子的embedding进行匹配交互，然后用 2D convolution 提取特征，这显然匹配层的好坏直接取决于 embedding的好坏；而arcii 首先使用了一层 1D convolution 对embedding进行编码，再进行匹配计算的。所以其实 match_pyramid 模型等于就是 arcii 模型的阉割版（少一层关键的 1D convolution）。
 
